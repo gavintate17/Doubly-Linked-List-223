@@ -1,0 +1,31 @@
+The numbers are the amount of shade-bearing trees next to each street section from east to west.
+The first number in each street is between Ruby and Lidgerwood, which is twice the length of the other street segments.
+All other street segments are roughly the same size.
+Where there would be a street in Augusta (the -1) is instead a field for a school with some shade-bearing trees on the sides.
+
+
+West to East streets:
+E Indiana Ave
+E Nora Ave
+E Augusta Ave
+Mission Ave
+E Sinto Ave
+E Sharp Ave
+
+North to South streets:
+N Ruby St
+N Lidgerwood St
+N Astor St
+N Addison St
+N Standard St
+North Dakota St
+N Cincinnati St
+N Hamilton St
+
+Tree counts:
+22 14 17 17 16 19 11
+21 14 20 28 14 12 12
+30 18 25 24 -1 11 14
+31 21 16 28 33 24 7
+26 22 21 26 25 26 10
+35 15 25 22 24 13 1
