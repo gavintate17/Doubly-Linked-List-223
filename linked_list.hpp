@@ -34,7 +34,6 @@ class StreetList{
     //Default constructor
     StreetList(){headPtr = nullptr;}
     //Destructor
-    //Not yet implemented, should clear the heap.
     ~StreetList();
 
     //Class functions
@@ -43,6 +42,8 @@ class StreetList{
 
     //Traversal functions
     void interactiveTraversal();
+
+    //Functions to add: (Insert, Delete, Printing, Search)
 
 };
 
