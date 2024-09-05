@@ -97,39 +97,65 @@ void StreetList::printList(){
 
 void StreetList::interactiveTraversal() {
     streetNode* nodePtr = headPtr;
+    vector<streetNode*> validStreets;  // To store pointers to valid intersections
 
     if (nodePtr == nullptr) {
         cout << "The list is empty.\n";
         return;
     }
 
+    // Gather valid street nodes into the validStreets vector, excluding ones with -2 or -1 trees
     while (nodePtr != nullptr) {
-        // Output the current node information
-        cout << "There are " << nodePtr->treeAmount << " trees on " 
-             << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+        if (nodePtr->treeAmount != -2 && nodePtr->treeAmount != -1) {  // Exclude intersections with -2 or -1 trees
+            validStreets.push_back(nodePtr);  // Store the pointer to the node
+        }
+        nodePtr = nodePtr->nextNode;
+    }
 
-        // Ask the user if they want to go forward or backward
-        string choice;
-        cout << "Would you like to go (f)orward, (b)ackward, or (q)uit? ";
+    int choice;
+    char continueChoice;
+
+    // Loop to keep asking for input
+    do {
+        // Print all available streets
+        cout << "\nAvailable streets:\n";
+        for (size_t i = 0; i < validStreets.size(); ++i) {
+            cout << i + 1 << ". " << validStreets[i]->weStreet << " and " << validStreets[i]->nsStreet << "\n";
+        }
+
+        // Ask to choose a street
+        cout << "Enter the number of the street you want to check (or 0 to quit): ";
         cin >> choice;
 
-        if (choice == "f" && nodePtr->nextNode != nullptr) {
-            nodePtr = nodePtr->nextNode;  // Move forward
-        } else if (choice == "b" && nodePtr->previousNode != nullptr) {
-            nodePtr = nodePtr->previousNode;  // Move backward
-        } else if (choice == "q") {
+        // Validate input
+        if (choice == 0) {
             cout << "Exiting traversal.\n";
-            break;
-        } else {
-            if (choice == "f") { //handles going forward
-                cout << "You are at the end of the list, can't move forward.\n";
-            } else if (choice == "b") { //handles going backward
-                cout << "You are at the beginning of the list, can't move backward.\n";
-            } else { //handles if misinput
-                cout << "Invalid option. Please enter 'f', 'b', or 'q'.\n";
-            }
+            return;
+        } else if (choice < 1 || choice > validStreets.size()) {
+            cout << "Invalid selection. Please try again.\n";
+            continue;
         }
-    }
+
+        // Display the selected street and tree amount
+        nodePtr = validStreets[choice - 1];  // Get the selected street node
+        cout << "You have selected " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+        if (nodePtr->treeAmount == 1) {
+            cout << "There is " << nodePtr->treeAmount << " tree at this intersection.\n";
+        }
+        else {
+            cout << "There are " << nodePtr->treeAmount << " trees at this intersection.\n";
+        }
+
+        // Ask if you want to pick a new intersection
+        cout << "Do you want to pick another intersection? (y/n): ";
+        cin >> continueChoice;
+
+        if (continueChoice == 'n' || continueChoice == 'N') {
+            cout << "Exiting traversal.\n";
+            return;
+        }
+
+    } while (true);  // Loop until you decide to quit
 }
 
 StreetList::~StreetList() { //Deconstructor

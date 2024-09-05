@@ -5,7 +5,7 @@ int main(){
     StreetList StreetObj;
     StreetObj.setup();
 
-    StreetObj.printList();
+    //StreetObj.printList(); -- Essentially handled this in the traversal
     //Traversal
     cout << "Starting traversal:" << endl;
     StreetObj.interactiveTraversal();
