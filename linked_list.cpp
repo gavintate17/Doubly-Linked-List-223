@@ -94,3 +94,49 @@ void StreetList::printList(){
     }
     cout << endl;
 }
+
+void StreetList::interactiveTraversal() {
+    streetNode* nodePtr = headPtr;
+
+    if (nodePtr == nullptr) {
+        cout << "The list is empty.\n";
+        return;
+    }
+
+    while (nodePtr != nullptr) {
+        // Output the current node information
+        cout << "There are " << nodePtr->treeAmount << " trees on " 
+             << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+
+        // Ask the user if they want to go forward or backward
+        string choice;
+        cout << "Would you like to go (f)orward, (b)ackward, or (q)uit? ";
+        cin >> choice;
+
+        if (choice == "f" && nodePtr->nextNode != nullptr) {
+            nodePtr = nodePtr->nextNode;  // Move forward
+        } else if (choice == "b" && nodePtr->previousNode != nullptr) {
+            nodePtr = nodePtr->previousNode;  // Move backward
+        } else if (choice == "q") {
+            cout << "Exiting traversal.\n";
+            break;
+        } else {
+            if (choice == "f") {
+                cout << "You are at the end of the list, can't move forward.\n";
+            } else if (choice == "b") {
+                cout << "You are at the beginning of the list, can't move backward.\n";
+            } else {
+                cout << "Invalid option. Please enter 'f', 'b', or 'q'.\n";
+            }
+        }
+    }
+}
+
+StreetList::~StreetList() {
+    streetNode* nodePtr = headPtr;
+    while (nodePtr != nullptr) {
+        streetNode* nextNode = nodePtr->nextNode;
+        delete nodePtr;
+        nodePtr = nextNode;
+    }
+}

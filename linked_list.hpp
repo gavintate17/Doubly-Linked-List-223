@@ -1,5 +1,5 @@
-#ifndef HEADER_H
-#define HEADER_H
+#ifndef LINKED_LIST_HPP
+#define LINKED_LIST_HPP
 
 //Libraries to be included:
 #include <iostream>
@@ -35,11 +35,14 @@ class StreetList{
     StreetList(){headPtr = nullptr;}
     //Destructor
     //Not yet implemented, should clear the heap.
-    ~StreetList(){}
+    ~StreetList();
 
     //Class functions
     void setup();
     void printList();
+
+    //Traversal functions
+    void interactiveTraversal();
 
 };
 
