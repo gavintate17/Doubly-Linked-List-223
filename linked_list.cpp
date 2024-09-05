@@ -158,8 +158,6 @@ void StreetList::interactiveTraversal() {
     } while (true);  // Loop until you decide to quit
 }
 
-
-
 StreetList::~StreetList() { //Deconstructor
     streetNode* nodePtr = headPtr;
     while (nodePtr != nullptr) {
