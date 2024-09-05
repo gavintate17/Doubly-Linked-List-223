@@ -121,18 +121,18 @@ void StreetList::interactiveTraversal() {
             cout << "Exiting traversal.\n";
             break;
         } else {
-            if (choice == "f") {
+            if (choice == "f") { //handles going forward
                 cout << "You are at the end of the list, can't move forward.\n";
-            } else if (choice == "b") {
+            } else if (choice == "b") { //handles going backward
                 cout << "You are at the beginning of the list, can't move backward.\n";
-            } else {
+            } else { //handles if misinput
                 cout << "Invalid option. Please enter 'f', 'b', or 'q'.\n";
             }
         }
     }
 }
 
-StreetList::~StreetList() {
+StreetList::~StreetList() { //Deconstructor
     streetNode* nodePtr = headPtr;
     while (nodePtr != nullptr) {
         streetNode* nextNode = nodePtr->nextNode;
