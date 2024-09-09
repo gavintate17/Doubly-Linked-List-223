@@ -119,27 +119,19 @@ void StreetList::interactiveTraversal() {
         printList();
 
         // Ask the user to input street names to search for
-        string weStreetInput, nsStreetInput;
-        cout << "Enter the name of the east-west street: ";
-        cin >> weStreetInput;
-
-        cout << "Enter the name of the north-south street: ";
-        cin >> nsStreetInput;
-
-        // Search directly within the traversal function
-        nodePtr = headPtr;
-        while (nodePtr != nullptr) {
-            if (nodePtr->weStreet == weStreetInput && nodePtr->nsStreet == nsStreetInput) {
-                break;  // Found the street, exit the loop
+        int num = 0;
+        bool loop = true;
+        while (loop == true){
+            cout << "Enter street number:\n";
+            cin >> num;
+            if (num < 1 or num > validStreetCount) {
+                cout << "Invalid number" << endl;
             }
-            nodePtr = nodePtr->nextNode;  // Move to the next node
+            else{
+                loop = false;
+            }
         }
-
-        // Validate search results
-        if (nodePtr == nullptr) {
-            cout << "Invalid street. Please try again.\n";
-            continue;
-        }
+        nodePtr = search(num);
 
         // Display the selected street and tree amount
         cout << "You have selected " << nodePtr->weStreet << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
@@ -199,9 +191,9 @@ void StreetList::interactiveTraversal() {
         } while (true);  // Loop until the user chooses to stop forward/backward traversal
 
         // Ask if the user wants to pick another intersection
-        cout << "Do you want to pick another intersection? (y/n): ";
+        cout << "Do you want to pick another street section? (y/n): ";
         cin >> continueChoice;
-
+        cin.ignore();
         if (continueChoice == 'n' || continueChoice == 'N') {
             cout << "Exiting traversal.\n";
             return;
@@ -217,4 +209,14 @@ StreetList::~StreetList() { //Deconstructor
         delete nodePtr;
         nodePtr = nextNode;
     }
+}
+
+StreetList::streetNode* StreetList::search(int num){
+    streetNode* nodePtr = headPtr;
+    int counter = 0;
+    while (++counter < num) {
+
+        nodePtr = nodePtr->nextNode;  // Move to the next node
+    }
+    return nodePtr;
 }

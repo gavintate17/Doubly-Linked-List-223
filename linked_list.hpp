@@ -40,6 +40,7 @@ class StreetList{
     //Class functions
     void setup();
     void printList();
+    streetNode* search(int num);
     //
 
     //Traversal functions
@@ -53,9 +54,5 @@ class StreetList{
     //
     //
 };
-
-
-
-//Other function defs:
 
 #endif
