@@ -82,7 +82,6 @@ void StreetList::setup(){
     inFile.close();
 }
 
-
 //Prints the entire list
 void StreetList::printList(){
     streetNode* nodePtr = headPtr;
@@ -114,6 +113,7 @@ void StreetList::interactiveTraversal() {
 
     int choice;
     char continueChoice;
+    char directionChoice;
 
     // Loop to keep asking for input
     do {
@@ -140,13 +140,50 @@ void StreetList::interactiveTraversal() {
         nodePtr = validStreets[choice - 1];  // Get the selected street node
         cout << "You have selected " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
         if (nodePtr->treeAmount == 1) {
-            cout << "There is " << nodePtr->treeAmount << " tree at this intersection.\n";
+            cout << "There is " << nodePtr->treeAmount << " tree at " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
         }
         else {
-            cout << "There are " << nodePtr->treeAmount << " trees at this intersection.\n";
+            cout << "There are " << nodePtr->treeAmount << " trees at " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
         }
 
-        // Ask if you want to pick a new intersection
+        // Keep asking if the user wants to go forward or backward until they want to stop
+        do {
+            // Ask if they want to move forward or backward
+            cout << "Do you want to move forward (f) or backward (b) in the list? (f/b, or 'n' to stop): ";
+            cin >> directionChoice;
+
+            if (directionChoice == 'n' || directionChoice == 'N') {
+                cout << "Stopping traversal for the current selection.\n";
+                break;  // Exit the inner loop and ask if they want to select a new intersection
+            }
+
+            // Handle forward or backward movement in the list
+            if (directionChoice == 'f' || directionChoice == 'F') {
+                if (nodePtr->nextNode != nullptr) {
+                    nodePtr = nodePtr->nextNode;
+                    cout << "Moving forward to: " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+                } else {
+                    cout << "No further streets in the list.\n";
+                }
+            } else if (directionChoice == 'b' || directionChoice == 'B') {
+                // Traverse backwards by searching through the validStreets list
+                for (size_t i = 0; i < validStreets.size(); ++i) {
+                    if (validStreets[i] == nodePtr && i > 0) {
+                        nodePtr = validStreets[i - 1];
+                        cout << "Moving backward to: " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+                        break;
+                    } else if (i == 0) {
+                        cout << "No previous streets in the list.\n";
+                        break;
+                    }
+                }
+            } else {
+                cout << "Invalid direction choice. Please try again.\n";
+            }
+
+        } while (true);  // Loop until the user chooses to stop forward/backward traversal
+
+        // Ask if the user wants to pick another intersection
         cout << "Do you want to pick another intersection? (y/n): ";
         cin >> continueChoice;
 
