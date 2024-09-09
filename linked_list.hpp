@@ -39,7 +39,8 @@ class StreetList{
     int validStreetCount;
     //Class functions
     void setup();
-    void printList(bool nums);
+    void printList();
+    //
 
     //Traversal functions
     void interactiveTraversal();
@@ -47,7 +48,7 @@ class StreetList{
     //Necessary functions:
     //Insert, Still needed
     // Delete, Destructor already does this???
-    // Printing, still needs to print in geographic representation as well
+    // Printing, done!
     // Search, Still needed. Takes int referring to a node and returns a pointer to that node
     //
     //

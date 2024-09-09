@@ -83,18 +83,15 @@ void StreetList::setup(){
 }
 
 //Prints the entire list
-void StreetList::printList(bool nums){
+void StreetList::printList(){
     streetNode* nodePtr = headPtr;
     int counter = 0;
     while (nodePtr->nextNode != nullptr){
 
         if (nodePtr->treeAmount >= 0){
 
-            if (nums)
-                cout << counter << ". ";
-
-            cout << "Between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet;
-            cout << " on " << nodePtr->weStreet << ".\n";
+            cout << counter << ". Between " << nodePtr->nsStreet << " and ";
+            cout << nodePtr->nextNode->nsStreet << " on " << nodePtr->weStreet << ".\n";
         }
         counter++;
         nodePtr = nodePtr->nextNode;
@@ -128,7 +125,7 @@ void StreetList::interactiveTraversal() {
     do {
         // Print all available streets
         cout << "\nAvailable streets:\n";
-        printList(true);
+        printList();
         // for (size_t i = 0; i < validStreets.size(); ++i) {
         //     cout << i + 1 << ". " << validStreets[i]->weStreet << " between " << validStreets[i]->nsStreet << " and " << validStreets[i+1]->nsStreet << "\n";
         // }
