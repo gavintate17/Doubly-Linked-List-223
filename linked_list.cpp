@@ -83,15 +83,24 @@ void StreetList::setup(){
 }
 
 //Prints the entire list
-void StreetList::printList(){
+void StreetList::printList(bool nums){
     streetNode* nodePtr = headPtr;
+    int counter = 0;
+    while (nodePtr->nextNode != nullptr){
 
-    while (nodePtr != nullptr){
-        cout << nodePtr->weStreet << " " << nodePtr->nsStreet << " " << nodePtr->treeAmount << "\n";
+        if (nodePtr->treeAmount >= 0){
 
+            if (nums)
+                cout << counter << ". ";
+
+            cout << "Between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet;
+            cout << " on " << nodePtr->weStreet << ".\n";
+        }
+        counter++;
         nodePtr = nodePtr->nextNode;
     }
     cout << endl;
+    validStreetCount = counter;
 }
 
 void StreetList::interactiveTraversal() {
@@ -104,12 +113,12 @@ void StreetList::interactiveTraversal() {
     }
 
     // Gather valid street nodes into the validStreets vector, excluding ones with -2 or -1 trees
-    while (nodePtr != nullptr) {
-        if (nodePtr->treeAmount != -2 && nodePtr->treeAmount != -1) {  // Exclude intersections with -2 or -1 trees
-            validStreets.push_back(nodePtr);  // Store the pointer to the node
-        }
-        nodePtr = nodePtr->nextNode;
-    }
+    // while (nodePtr != nullptr) {
+    //     if (nodePtr->treeAmount != -1) {  // Exclude intersections with -2 or -1 trees
+    //         validStreets.push_back(nodePtr);  // Store the pointer to the node
+    //     }
+    //     nodePtr = nodePtr->nextNode;
+    // }
 
     int choice;
     char continueChoice;
@@ -119,9 +128,11 @@ void StreetList::interactiveTraversal() {
     do {
         // Print all available streets
         cout << "\nAvailable streets:\n";
-        for (size_t i = 0; i < validStreets.size(); ++i) {
-            cout << i + 1 << ". " << validStreets[i]->weStreet << " and " << validStreets[i]->nsStreet << "\n";
-        }
+        printList(true);
+        // for (size_t i = 0; i < validStreets.size(); ++i) {
+        //     cout << i + 1 << ". " << validStreets[i]->weStreet << " between " << validStreets[i]->nsStreet << " and " << validStreets[i+1]->nsStreet << "\n";
+        // }
+
 
         // Ask to choose a street
         cout << "Enter the number of the street you want to check (or 0 to quit): ";
@@ -131,19 +142,22 @@ void StreetList::interactiveTraversal() {
         if (choice == 0) {
             cout << "Exiting traversal.\n";
             return;
-        } else if (choice < 1 || choice > validStreets.size()) {
+        } else if (choice < 1 || choice > validStreetCount) {
             cout << "Invalid selection. Please try again.\n";
             continue;
         }
 
         // Display the selected street and tree amount
-        nodePtr = validStreets[choice - 1];  // Get the selected street node
-        cout << "You have selected " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+        //nodePtr = validStreets[choice - 1];  // Get the selected street node
+        //Use search function to choose a street
+        cout << "You have selected " << nodePtr->weStreet << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
         if (nodePtr->treeAmount == 1) {
-            cout << "There is " << nodePtr->treeAmount << " tree at " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+            cout << "There is " << nodePtr->treeAmount << " tree at " << nodePtr->weStreet;
+            cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
         }
         else {
-            cout << "There are " << nodePtr->treeAmount << " trees at " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+            cout << "There are " << nodePtr->treeAmount << " trees at " << nodePtr->weStreet;
+            cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
         }
 
         // Keep asking if the user wants to go forward or backward until they want to stop
@@ -159,23 +173,40 @@ void StreetList::interactiveTraversal() {
 
             // Handle forward or backward movement in the list
             if (directionChoice == 'f' || directionChoice == 'F') {
-                if (nodePtr->nextNode != nullptr) {
+                if(nodePtr->nextNode->treeAmount == -1){ //Skip over the school
                     nodePtr = nodePtr->nextNode;
-                    cout << "Moving forward to: " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
-                } else {
-                    cout << "No further streets in the list.\n";
+                }
+                if(nodePtr->nextNode->treeAmount == -2 or nodePtr->nextNode != nullptr){
+                    cout << "No further streets on " << nodePtr->weStreet << ".\n";
+                }
+                else{
+                    nodePtr = nodePtr->nextNode;
+                    cout << "Moving forward to: " << nodePtr->weStreet << ", between ";
+                    cout << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
                 }
             } else if (directionChoice == 'b' || directionChoice == 'B') {
                 // Traverse backwards by searching through the validStreets list
-                for (size_t i = 0; i < validStreets.size(); ++i) {
-                    if (validStreets[i] == nodePtr && i > 0) {
-                        nodePtr = validStreets[i - 1];
-                        cout << "Moving backward to: " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
-                        break;
-                    } else if (i == 0) {
-                        cout << "No previous streets in the list.\n";
-                        break;
-                    }
+                // for (size_t i = 0; i < validStreets.size(); ++i) {
+                //     if (validStreets[i] == nodePtr && i > 0) {
+                //         nodePtr = validStreets[i - 1];
+                //         cout << "Moving backward to: " << nodePtr->weStreet << " and " << nodePtr->nsStreet << ".\n";
+                //         break;
+                //     } else if (i == 0) {
+                //         cout << "No previous streets in the list.\n";
+                //         break;
+                //     }
+                // }
+                //Same as moving forward but goes backward (left).
+                if(nodePtr->nextNode->treeAmount == -1){ //Skip over the school
+                    nodePtr = nodePtr->previousNode;
+                }
+                if(nodePtr->previousNode->treeAmount == -2 or nodePtr->previousNode != nullptr){
+                    cout << "No previous streets on " << nodePtr->weStreet << ".\n";
+                }
+                else{
+                    nodePtr = nodePtr->previousNode;
+                    cout << "Moving backward to: " << nodePtr->weStreet << ", between ";
+                    cout << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
                 }
             } else {
                 cout << "Invalid direction choice. Please try again.\n";
