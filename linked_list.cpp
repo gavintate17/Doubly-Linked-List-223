@@ -1,5 +1,6 @@
 #include "linked_list.hpp"
 
+
 void StreetList::processStreets(ifstream* file){
     string junk;
     string street;
@@ -54,7 +55,6 @@ void StreetList::createAllNodes(){
 }
 
 void StreetList::initializeAllNodes(ifstream* file){
-    bool end = false;
 
     streetNode* nodePtr = headPtr;
     for (int i = 0; i < weStreets.size() and nodePtr != nullptr; i++){
@@ -74,11 +74,47 @@ void StreetList::initializeAllNodes(ifstream* file){
     }
 }
 
+
+void StreetList::initializeAllDistances(ifstream* file){
+
+    streetNode* nodePtr = headPtr;
+    string word;
+    int number;
+    int counter = 0;
+    vector <int> distances;
+    
+    while (!(*file).eof()) {
+        if (*file >> number) {
+            distances.push_back(number);
+        } else {
+            //if extraction fails, clear the error state and ignore the bad input
+            file->clear();
+            file->ignore();
+        }
+        }
+        
+    for (int i = 0; i < weStreets.size() and nodePtr != nullptr and counter < distances.size(); i++){
+        for (int j = 0; j < nsStreets.size() and nodePtr != nullptr and counter < distances.size(); j++){
+
+            if (j == nsStreets.size() - 1){
+                nodePtr->treeDistance = -2;
+            }
+            else{
+                nodePtr->treeDistance = distances.at(counter++);
+
+            }
+
+            nodePtr = nodePtr->nextNode;
+        }
+    }
+}
+
 void StreetList::setup(){
     ifstream inFile("tree_list.dat");
     processStreets(&inFile);
     createAllNodes();
     initializeAllNodes(&inFile);
+    initializeAllDistances(&inFile);
     inFile.close();
 }
 
@@ -90,7 +126,7 @@ void StreetList::printList(){
 
         if (nodePtr->treeAmount >= 0){
 
-            cout << counter << ". Between " << nodePtr->nsStreet << " and ";
+            cout << counter + 1 << ". Between " << nodePtr->nsStreet << " and ";
             cout << nodePtr->nextNode->nsStreet << " on " << nodePtr->weStreet << ".\n";
         }
         counter++;
@@ -135,19 +171,12 @@ void StreetList::interactiveTraversal() {
 
         // Display the selected street and tree amount
         cout << "You have selected " << nodePtr->weStreet << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
-        if (nodePtr->treeAmount == 1) {
-            cout << "There is " << nodePtr->treeAmount << " tree at " << nodePtr->weStreet;
-            cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
-        }
-        else {
-            cout << "There are " << nodePtr->treeAmount << " trees at " << nodePtr->weStreet;
-            cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
-        }
+        printTrees(nodePtr);
 
         // Keep asking if the user wants to go forward or backward until they want to stop
         do {
             // Ask if they want to move forward or backward
-            cout << "Do you want to move forward (f) or backward (b) in the list? (f/b, or 'n' to stop): ";
+            cout << "\nDo you want to move forward (f) or backward (b) in the list? (f/b, or 'n' to stop): ";
             cin >> directionChoice;
 
             if (directionChoice == 'n' || directionChoice == 'N') {
@@ -168,6 +197,7 @@ void StreetList::interactiveTraversal() {
                     nodePtr = nodePtr->nextNode;
                     cout << "Moving forward to: " << nodePtr->weStreet << ", between ";
                     cout << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
+                    printTrees(nodePtr);
                 }
             } 
             else if (directionChoice == 'b' || directionChoice == 'B') {
@@ -182,6 +212,7 @@ void StreetList::interactiveTraversal() {
                     nodePtr = nodePtr->previousNode;
                     cout << "Moving backward to: " << nodePtr->weStreet << ", between ";
                     cout << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
+                    printTrees(nodePtr);
                 }
             } 
             else {
@@ -200,6 +231,18 @@ void StreetList::interactiveTraversal() {
         }
 
     } while (true);  // Loop until you decide to quit
+}
+
+void StreetList::printTrees(streetNode* nodePtr){
+    if (nodePtr->treeAmount == 1) {
+                cout << "There is " << nodePtr->treeAmount << " tree at " << nodePtr->weStreet;
+                cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
+            }
+            else {
+                cout << "There are " << nodePtr->treeAmount << " trees at " << nodePtr->weStreet;
+                cout << ", between " << nodePtr->nsStreet << " and " << nodePtr->nextNode->nsStreet << ".\n";
+                cout << "Each tree is about " << nodePtr->treeDistance << "ft apart.\n";
+            }
 }
 
 StreetList::~StreetList() { //Deconstructor

@@ -20,6 +20,7 @@ class StreetList{
         string nsStreet; //going north to south
         string weStreet; //going west to east
         int treeAmount;
+        int treeDistance;
         streetNode* previousNode;
         streetNode* nextNode;
     };
@@ -29,6 +30,8 @@ class StreetList{
     void processStreets(ifstream* file);
     void createAllNodes();
     void initializeAllNodes(ifstream* file);
+    void initializeAllDistances(ifstream* file);
+    void printTrees(streetNode*);
 
     public:
     //Default constructor
